@@ -20,7 +20,7 @@ final class DessertDetailViewModel {
     init(dessertID: String, dessertService: DessertServiceProtocol = DessertService.shared) {
         self.dessertService = dessertService
         
-        // Load the dessert detail from the service
+        // Load the dessert detail from the service.
         dessertDetail = dessertService.dessertDetail(by: dessertID)
             .share(replay: 1)
     }

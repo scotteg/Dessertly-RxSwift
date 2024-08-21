@@ -24,11 +24,11 @@ final class DessertsListViewModel {
     init(dessertService: DessertServiceProtocol = DessertService.shared) {
         self.dessertService = dessertService
         
-        // Load desserts from the service
+        // Load desserts from the service.
         desserts = dessertService.desserts
             .share(replay: 1)
         
-        // Filter the desserts based on the search query
+        // Filter the desserts based on the search query.
         filteredDesserts = Observable.combineLatest(desserts, searchQuerySubject)
             .map { desserts, query in
                 guard !query.isEmpty else { return desserts }
