@@ -55,24 +55,14 @@ struct CachedAsyncImage: View {
     
     /// Fetches the image using RxSwift and caches it.
     private func fetchImage() -> Observable<UIImage?> {
-        return Observable.create { observer in
-            let task = URLSession.shared.dataTask(with: self.url) { data, response, error in
-                if let error = error {
-                    observer.onError(error)
-                } else if let data = data, let loadedImage = UIImage(data: data) {
-                    ImageCache.shared.setImage(loadedImage, forKey: self.url.absoluteString)
-                    observer.onNext(loadedImage)
-                    observer.onCompleted()
-                } else {
-                    observer.onNext(nil)
-                    observer.onCompleted()
+        return URLSession.shared.rx.data(request: URLRequest(url: url))
+            .map { data in
+                if let loadedImage = UIImage(data: data) {
+                    ImageCache.shared.setImage(loadedImage, forKey: url.absoluteString)
+                    return loadedImage
                 }
+                return nil
             }
-            task.resume()
-            
-            return Disposables.create {
-                task.cancel()
-            }
-        }
+            .catchAndReturn(nil) // Handle errors by returning `nil` instead of propagating the error
     }
 }

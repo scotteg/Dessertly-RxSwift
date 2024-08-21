@@ -9,10 +9,7 @@ import Foundation
 
 /// Represents detailed information about a dessert.
 struct DessertDetail: Decodable {
-    /// Unique identifier for the dessert.
     let id: String
-    
-    /// Name of the dessert.
     let name: String
     
     /// Preparation instructions for the dessert. This property is optional as instructions may not be available.
@@ -47,7 +44,7 @@ struct DessertDetail: Decodable {
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         
-        // Reformats the `instructions` text if present.
+        // Reformat the `instructions` text if present.
         if let unformattedInstructions = try container.decodeIfPresent(String.self, forKey: .instructions) {
             instructions = Self.reformatText(unformattedInstructions)
         } else {
@@ -59,12 +56,12 @@ struct DessertDetail: Decodable {
         var ingredientsDict = [String: String]()
         let dynamicContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
         
-        // Loops through potential ingredient and measure keys in the JSON, from 1 to 20.
+        // Loop through potential ingredient and measure keys in the JSON, from 1 to 20.
         for i in 1...20 {
             let ingredientKey = DynamicCodingKeys(stringValue: "strIngredient\(i)")!
             let measureKey = DynamicCodingKeys(stringValue: "strMeasure\(i)")!
             
-            // Checks if the `ingredient` and `measure` are not empty, then capitalizes and stores them in the dictionary.
+            // Check if the `ingredient` and `measure` are not empty, then capitalize and store them in the dictionary.
             if let ingredient = try dynamicContainer.decodeIfPresent(String.self, forKey: ingredientKey)?.capitalized,
                !ingredient.isEmpty,
                let measure = try dynamicContainer.decodeIfPresent(String.self, forKey: measureKey),

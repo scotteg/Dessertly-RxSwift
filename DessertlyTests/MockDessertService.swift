@@ -21,6 +21,7 @@ final class MockDessertService: DessertServiceProtocol {
         if shouldThrow {
             return Observable.error(URLError(.badServerResponse))
         }
+        
         return Observable.just([
             Dessert(id: "1", name: "Mock Dessert 1", thumbnail: ""),
             Dessert(id: "2", name: "Mock Dessert 2", thumbnail: "")
@@ -31,6 +32,7 @@ final class MockDessertService: DessertServiceProtocol {
         if shouldThrow {
             return Observable.error(URLError(.badServerResponse))
         }
+        
         return Observable.just(DessertDetail(
             id: id,
             name: "Mock Dessert",
