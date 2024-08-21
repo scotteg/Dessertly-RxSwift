@@ -110,7 +110,8 @@ struct DessertDetailView: View {
                 Spacer()
                 Button(action: {
                     sortAscending.toggle()
-                    sortedIngredients = viewModel.sortIngredients(ingredients: dessertDetail?.ingredients ?? [:], ascending: sortAscending)
+                    sortedIngredients = viewModel.sortIngredients(ingredients: dessertDetail?.ingredients ?? [:],
+                                                                  ascending: sortAscending)
                 }) {
                     Image(systemName: sortAscending ? "chevron.up" : "chevron.down")
                 }
@@ -136,7 +137,8 @@ struct DessertDetailView: View {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { detail in
                 self.dessertDetail = detail
-                self.sortedIngredients = self.viewModel.sortIngredients(ingredients: detail.ingredients, ascending: self.sortAscending)
+                self.sortedIngredients = self.viewModel.sortIngredients(ingredients: detail.ingredients,
+                                                                        ascending: self.sortAscending)
                 self.isLoading = false
             }, onError: { error in
                 self.hasError = true
