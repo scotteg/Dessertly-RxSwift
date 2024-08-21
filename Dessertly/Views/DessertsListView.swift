@@ -10,9 +10,6 @@ import RxSwift
 import RxCocoa
 
 struct DessertsListView: View {
-    private let viewModel = DessertsListViewModel()
-    private let disposeBag = DisposeBag()
-    
     @State private var desserts: [Dessert] = []
     @State private var filteredDesserts: [Dessert] = []
     @State private var isLoading = true
@@ -20,8 +17,11 @@ struct DessertsListView: View {
     @State private var currentErrorMessage: String?
     @State private var searchQuery: String = ""
     
+    private let viewModel = DessertsListViewModel()
+    private let disposeBag = DisposeBag()
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
                 if isLoading {
                     ProgressView()
