@@ -10,7 +10,6 @@ import RxSwift
 /// View model responsible for fetching and managing a list of desserts.
 final class DessertsListViewModel {
     private let dessertService: DessertServiceProtocol
-    private let disposeBag = DisposeBag()
     
     // Inputs
     private let searchQuerySubject = BehaviorSubject<String>(value: "")

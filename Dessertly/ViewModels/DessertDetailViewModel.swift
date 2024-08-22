@@ -10,7 +10,6 @@ import RxSwift
 /// View model responsible for fetching and managing the details of a specific dessert.
 final class DessertDetailViewModel {
     private let dessertService: DessertServiceProtocol
-    private let disposeBag = DisposeBag()
     
     // Outputs
     let dessertDetail: Observable<DessertDetail>
