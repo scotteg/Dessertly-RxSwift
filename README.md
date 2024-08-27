@@ -1,5 +1,7 @@
 # Dessertly-RxSwift
 
+[Repo](https://github.com/scotteg/Dessertly-RxSwift)
+
 **Dessertly-RxSwift** is an iOS app that provides a delightful experience for discovering and learning about desserts. It features a comprehensive list of desserts and detailed information about each one, making it easy to explore a variety of sweet treats.
 
 This project is a version of the [Dessertly](https://github.com/scotteg/Dessertly) app, converted to use RxSwift. It serves as an idiomatic example of using RxSwift as an alternative to Swift Concurrency, showcasing modern, reactive Swift development. The app also highlights the use of SwiftUI, responsive design, and networking with REST APIs. It follows the MVVM (Model-View-ViewModel) architecture design pattern, promoting a clean separation of concerns and making the codebase more maintainable and testable. It's designed to be both a practical app and a learning resource for developers to adopt best practices in RxSwift development.
