@@ -7,7 +7,6 @@
 
 import SwiftUI
 import RxSwift
-import RxCocoa
 
 struct DessertsListView: View {
     @State private var desserts: [Dessert] = []

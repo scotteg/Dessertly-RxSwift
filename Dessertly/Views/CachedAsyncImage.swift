@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RxSwift
+import RxCocoa
 
 /// A view that asynchronously loads and caches an image from a given URL using RxSwift.
 struct CachedAsyncImage: View {
@@ -63,7 +64,7 @@ struct CachedAsyncImage: View {
                 
                 return nil
             }
-            .catchAndReturn(nil) // Handle errors by returning `nil` instead of propagating the error
+            .catchAndReturn(nil)
     }
     
     /// Handles image load errors.
