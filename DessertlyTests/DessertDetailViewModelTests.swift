@@ -10,10 +10,6 @@ import RxSwift
 import RxBlocking
 @testable import Dessertly_RxSwift
 
-import XCTest
-import RxSwift
-import RxBlocking
-
 /// Tests for `DessertDetailViewModel` to ensure it correctly loads and manages dessert details.
 final class DessertDetailViewModelTests: XCTestCase {
     private var viewModel: DessertDetailViewModel!
@@ -50,6 +46,22 @@ final class DessertDetailViewModelTests: XCTestCase {
         XCTAssertThrowsError(try viewModel.dessertDetail.toBlocking().first())
     }
     
+    /// Tests sorting ingredients in ascending order.
+    func testSortIngredientsAscending() throws {
+        let detail = try viewModel.dessertDetail.toBlocking().first()
+        
+        let sortedIngredients = viewModel.sortIngredients(ingredients: detail?.ingredients ?? [:], ascending: true)
+        XCTAssertEqual(sortedIngredients.map { $0.ingredient }, ["Eggs", "Flour", "Sugar"])
+    }
+    
+    /// Tests sorting ingredients in descending order.
+    func testSortIngredientsDescending() throws {
+        let detail = try viewModel.dessertDetail.toBlocking().first()
+        
+        let sortedIngredients = viewModel.sortIngredients(ingredients: detail?.ingredients ?? [:], ascending: false)
+        XCTAssertEqual(sortedIngredients.map { $0.ingredient }, ["Sugar", "Flour", "Eggs"])
+    }
+    
     /// Tests that an error is reported to the ErrorHandler on failure.
     func testErrorReportedToErrorHandler() {
         mockService = MockDessertService(shouldThrow: true)
@@ -75,21 +87,5 @@ final class DessertDetailViewModelTests: XCTestCase {
         
         XCTAssertNotNil(reportedError)
         XCTAssertTrue(reportedError is URLError)
-    }
-    
-    /// Tests sorting ingredients in ascending order.
-    func testSortIngredientsAscending() throws {
-        let detail = try viewModel.dessertDetail.toBlocking().first()
-        
-        let sortedIngredients = viewModel.sortIngredients(ingredients: detail?.ingredients ?? [:], ascending: true)
-        XCTAssertEqual(sortedIngredients.map { $0.ingredient }, ["Eggs", "Flour", "Sugar"])
-    }
-    
-    /// Tests sorting ingredients in descending order.
-    func testSortIngredientsDescending() throws {
-        let detail = try viewModel.dessertDetail.toBlocking().first()
-        
-        let sortedIngredients = viewModel.sortIngredients(ingredients: detail?.ingredients ?? [:], ascending: false)
-        XCTAssertEqual(sortedIngredients.map { $0.ingredient }, ["Sugar", "Flour", "Eggs"])
     }
 }

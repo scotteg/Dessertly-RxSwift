@@ -7,12 +7,11 @@
 
 import RxSwift
 
-/// View model responsible for fetching and managing the details of a specific dessert.
+/// Fetches and manages the details of a specific dessert.
 final class DessertDetailViewModel {
-    private let dessertService: DessertServiceProtocol
-    
-    // Outputs
     let dessertDetail: Observable<DessertDetail>
+    
+    private let dessertService: DessertServiceProtocol
     
     /// Initializes the view model with a specific dessert service.
     /// - Parameter dessertService: The dessert service to be used for fetching data. Defaults to `DessertService.shared`.
@@ -21,7 +20,7 @@ final class DessertDetailViewModel {
         
         // Load the dessert detail from the service.
         dessertDetail = dessertService.dessertDetail(by: dessertID)
-            .share(replay: 1)
+            .share(replay: 1, scope: .whileConnected)
     }
     
     /// Sorts the ingredients either in ascending or descending order.

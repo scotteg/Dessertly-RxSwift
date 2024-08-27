@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-/// A service that conforms to `DessertServiceProtocol` and handles fetching desserts and their details using RxSwift.
+/// Fetches desserts and their details. Conforms to `DessertServiceProtocol`.
 final class DessertService: DessertServiceProtocol {
     static let shared = DessertService()
     
