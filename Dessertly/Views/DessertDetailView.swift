@@ -18,6 +18,7 @@ struct DessertDetailView: View {
     @State private var hasError = false
     @State private var sortedIngredients: [(ingredient: String, measure: String)] = []
     @State private var sortAscending = true
+    @State private var currentErrorMessage: String?
     
     init(dessertID: String) {
         self.dessertID = dessertID
@@ -30,7 +31,7 @@ struct DessertDetailView: View {
                 ProgressView()
                     .padding()
             } else if hasError {
-                Text("An error occurred while loading the dessert detail.")
+                Text(currentErrorMessage ?? "An error occurred while loading the dessert detail.")
                     .foregroundColor(.red)
                     .padding()
             } else if let detail = dessertDetail {
@@ -40,6 +41,7 @@ struct DessertDetailView: View {
         }
         .onAppear {
             bindViewModel()
+            bindErrorHandler()
         }
     }
     
@@ -140,8 +142,18 @@ struct DessertDetailView: View {
                 self.sortedIngredients = self.viewModel.sortIngredients(ingredients: detail.ingredients,
                                                                         ascending: self.sortAscending)
                 self.isLoading = false
-            }, onError: { error in
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindErrorHandler() {
+        ErrorHandler.shared.observeCurrentError()
+            .compactMap { $0 } // Filter out nil errors
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { error in
+                self.currentErrorMessage = error.localizedDescription
                 self.hasError = true
+                self.isLoading = false
             })
             .disposed(by: disposeBag)
     }

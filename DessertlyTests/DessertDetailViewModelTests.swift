@@ -10,15 +10,21 @@ import RxSwift
 import RxBlocking
 @testable import Dessertly_RxSwift
 
+import XCTest
+import RxSwift
+import RxBlocking
+
 /// Tests for `DessertDetailViewModel` to ensure it correctly loads and manages dessert details.
 final class DessertDetailViewModelTests: XCTestCase {
     private var viewModel: DessertDetailViewModel!
     private var mockService: MockDessertService!
+    private var errorHandler: ErrorHandler!
     private let disposeBag = DisposeBag()
     
     override func setUp() {
         super.setUp()
         mockService = MockDessertService()
+        errorHandler = ErrorHandler.shared
         viewModel = DessertDetailViewModel(dessertID: "1", dessertService: mockService)
     }
     
@@ -42,6 +48,33 @@ final class DessertDetailViewModelTests: XCTestCase {
         viewModel = DessertDetailViewModel(dessertID: "1", dessertService: mockService)
         
         XCTAssertThrowsError(try viewModel.dessertDetail.toBlocking().first())
+    }
+    
+    /// Tests that an error is reported to the ErrorHandler on failure.
+    func testErrorReportedToErrorHandler() {
+        mockService = MockDessertService(shouldThrow: true)
+        viewModel = DessertDetailViewModel(dessertID: "1", dessertService: mockService)
+        
+        let expectation = self.expectation(description: "Error should be reported")
+        var reportedError: Error?
+        
+        // Subscribe to the error handler
+        errorHandler.observeCurrentError()
+            .compactMap { $0 } // Filter out nil errors.
+            .take(1)
+            .subscribe(onNext: { error in
+                reportedError = error
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+        
+        // Trigger the error by attempting to load dessert details.
+        _ = try? viewModel.dessertDetail.toBlocking().first()
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+        
+        XCTAssertNotNil(reportedError)
+        XCTAssertTrue(reportedError is URLError)
     }
     
     /// Tests sorting ingredients in ascending order.

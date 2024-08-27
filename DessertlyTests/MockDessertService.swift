@@ -19,7 +19,9 @@ final class MockDessertService: DessertServiceProtocol {
     
     var desserts: Observable<[Dessert]> {
         if shouldThrow {
-            return Observable.error(URLError(.badServerResponse))
+            let error = URLError(.badServerResponse)
+            ErrorHandler.shared.report(error: error)
+            return Observable.error(error)
         }
         
         return Observable.just([
@@ -30,7 +32,9 @@ final class MockDessertService: DessertServiceProtocol {
     
     func dessertDetail(by id: String) -> Observable<DessertDetail> {
         if shouldThrow {
-            return Observable.error(URLError(.badServerResponse))
+            let error = URLError(.badServerResponse)
+            ErrorHandler.shared.report(error: error)
+            return Observable.error(error)
         }
         
         return Observable.just(DessertDetail(

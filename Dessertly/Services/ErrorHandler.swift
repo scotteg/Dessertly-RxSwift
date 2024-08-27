@@ -6,29 +6,28 @@
 //
 
 import Foundation
+import RxSwift
 
-/// An actor responsible for managing and reporting errors across the app.
-actor ErrorHandler {
+/// Manages and reports errors across the app.
+final class ErrorHandler {
     static let shared = ErrorHandler()
     
-    private var _currentError: Error?
+    private let errorSubject = ReplaySubject<Error?>.create(bufferSize: 1)
     
     private init() {}
     
     /// Reports an error to the centralized error handler.
-    /// - Parameter error: The error to report.
-    func report(error: Error) async {
-        _currentError = error
+    func report(error: Error) {
+        errorSubject.onNext(error)
     }
     
-    /// Retrieves the current error.
-    /// - Returns: The current error, if any.
-    func getCurrentError() async -> Error? {
-        return _currentError
+    /// Observes the current error.
+    func observeCurrentError() -> Observable<Error?> {
+        return errorSubject.asObservable()
     }
     
     /// Clears the current error.
-    func clearError() async {
-        _currentError = nil
+    func clearError() {
+        errorSubject.onNext(nil)
     }
 }

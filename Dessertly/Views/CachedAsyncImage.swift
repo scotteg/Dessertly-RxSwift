@@ -46,8 +46,7 @@ struct CachedAsyncImage: View {
                     self.image = loadedImage
                     self.isLoading = false
                 }, onError: { error in
-                    print("Failed to load image: \(error.localizedDescription)")
-                    self.isLoading = false
+                    handleImageLoadError(error)
                 })
                 .disposed(by: disposeBag)
         }
@@ -61,8 +60,16 @@ struct CachedAsyncImage: View {
                     ImageCache.shared.setImage(loadedImage, forKey: url.absoluteString)
                     return loadedImage
                 }
+                
                 return nil
             }
             .catchAndReturn(nil) // Handle errors by returning `nil` instead of propagating the error
+    }
+    
+    /// Handles image load errors.
+    private func handleImageLoadError(_ error: Error) {
+        print("Failed to load image: \(error.localizedDescription)")
+        self.isLoading = false
+        ErrorHandler.shared.report(error: error)
     }
 }

@@ -30,13 +30,8 @@ final class DessertService: DessertServiceProtocol {
                 return dessertResponse.meals.sorted { $0.name < $1.name }
             }
             .do(onError: { error in
-                Task {
-                    await ErrorHandler.shared.report(error: error)
-                }
+                ErrorHandler.shared.report(error: error)
             })
-            .catch { error in
-                Observable.error(error)
-            }
     }
     
     /// Fetches detailed information for a specific dessert by its ID.
@@ -47,27 +42,21 @@ final class DessertService: DessertServiceProtocol {
         
         return URLSession.shared.rx.data(request: URLRequest(url: url))
             .map { data in
-                let detailResponse = try JSONDecoder().decode(DessertDetailResponse.self, from: data)
-                guard let rawDetail = detailResponse.meals.first else {
-                    throw URLError(.badServerResponse)
-                }
-                
-                return DessertDetail(
-                    id: rawDetail.id,
-                    name: rawDetail.name,
-                    instructions: rawDetail.instructions,
-                    ingredients: rawDetail.ingredients,
-                    imageUrl: rawDetail.imageUrl
+                try JSONDecoder().decode(DessertDetailResponse.self, from: data)
+            }
+            .compactMap { $0.meals.first }
+            .map { detail in
+                DessertDetail(
+                    id: detail.id,
+                    name: detail.name,
+                    instructions: detail.instructions,
+                    ingredients: detail.ingredients,
+                    imageUrl: detail.imageUrl
                 )
             }
             .do(onError: { error in
-                Task {
-                    await ErrorHandler.shared.report(error: error)
-                }
+                ErrorHandler.shared.report(error: error)
             })
-            .catch { error in
-                Observable.error(error)
-            }
     }
     
     private func makeURL(endpoint: String, queryItems: [URLQueryItem]) -> URL? {

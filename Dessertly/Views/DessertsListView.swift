@@ -76,6 +76,7 @@ struct DessertsListView: View {
             }
             .onAppear {
                 bindViewModel()
+                bindErrorHandler()
             }
         }
     }
@@ -86,9 +87,6 @@ struct DessertsListView: View {
             .subscribe(onNext: { desserts in
                 self.filteredDesserts = desserts
                 self.isLoading = false
-            }, onError: { error in
-                self.currentErrorMessage = error.localizedDescription
-                self.isShowingError = true
             })
             .disposed(by: disposeBag)
         
@@ -96,6 +94,17 @@ struct DessertsListView: View {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { desserts in
                 self.desserts = desserts
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindErrorHandler() {
+        ErrorHandler.shared.observeCurrentError()
+            .compactMap { $0 } // Filter out nil errors
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { error in
+                self.currentErrorMessage = error.localizedDescription
+                self.isShowingError = true
             })
             .disposed(by: disposeBag)
     }
