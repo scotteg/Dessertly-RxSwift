@@ -56,6 +56,7 @@ struct CachedAsyncImage: View {
     /// Fetches the image using RxSwift and caches it.
     private func fetchImage() -> Observable<UIImage?> {
         return URLSession.shared.rx.data(request: URLRequest(url: url))
+            .retry(2)
             .map { data in
                 if let loadedImage = UIImage(data: data) {
                     ImageCache.shared.setImage(loadedImage, forKey: url.absoluteString)

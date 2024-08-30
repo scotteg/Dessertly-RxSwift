@@ -25,6 +25,7 @@ final class DessertService: DessertServiceProtocol {
         }
         
         return URLSession.shared.rx.data(request: URLRequest(url: url))
+            .retry(2)
             .map { data in
                 let dessertResponse = try JSONDecoder().decode(DessertResponse.self, from: data)
                 return dessertResponse.meals.sorted { $0.name < $1.name }
@@ -41,6 +42,7 @@ final class DessertService: DessertServiceProtocol {
         }
         
         return URLSession.shared.rx.data(request: URLRequest(url: url))
+            .retry(2)
             .map { data in
                 try JSONDecoder().decode(DessertDetailResponse.self, from: data)
             }
