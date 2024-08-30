@@ -7,7 +7,7 @@
 
 import RxSwift
 
-/// Protocol that defines the requirements to fetch dessert data using RxSwift.
+/// Protocol that defines the requirements to fetch dessert data.
 protocol DessertServiceProtocol {
     
     /// An observable sequence of a sorted array of `Dessert` instances.
