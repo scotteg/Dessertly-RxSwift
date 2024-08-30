@@ -14,7 +14,7 @@ final class ErrorHandler {
     
     private let errorSubject = ReplaySubject<Error?>.create(bufferSize: 1)
     
-    private init() {}
+    private init() { }
     
     /// Reports an error to the centralized error handler.
     func report(error: Error) {

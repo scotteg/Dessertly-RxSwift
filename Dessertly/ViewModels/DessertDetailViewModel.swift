@@ -26,8 +26,8 @@ final class DessertDetailViewModel {
     /// Sorts the ingredients either in ascending or descending order.
     /// - Parameters:
     ///   - ingredients: A dictionary of ingredients and their measurements.
-    ///   - ascending: A boolean value indicating whether the sorting should be ascending or descending.
-    /// - Returns: A sorted array of tuples containing the ingredient and its measurement.
+    ///   - ascending: A boolean value that indicates whether the sorting should be ascending or descending.
+    /// - Returns: A sorted array of tuples that contains the ingredient and its measurement.
     func sortIngredients(ingredients: [String: String], ascending: Bool) -> [(ingredient: String, measure: String)] {
         let ingredientsArray = ingredients.map { ($0.key, $0.value) }
         let sortedIngredients = ingredientsArray.sorted { $0.0.lowercased() < $1.0.lowercased() }

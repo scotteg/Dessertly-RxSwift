@@ -22,7 +22,7 @@ final class DessertsListViewModel {
         
         // Load the list of desserts from the service.
         desserts = dessertService.desserts
-            .share(replay: 1, scope: .whileConnected) // Limit retention to active subscriptions.
+            .share(replay: 1, scope: .whileConnected)
         
         // Filter the desserts based on the search query.
         filteredDesserts = Observable.combineLatest(desserts, searchQuerySubject)

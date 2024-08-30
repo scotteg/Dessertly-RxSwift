@@ -60,10 +60,7 @@ struct DessertsListView: View {
                     viewModel.updateSearchQuery(newValue)
                 }
             ), prompt: "Search for desserts")
-            .alert(isPresented: Binding(
-                get: { isShowingError },
-                set: { _ in }
-            )) {
+            .alert(isPresented: $isShowingError) {
                 Alert(
                     title: Text("Error"),
                     message: Text(currentErrorMessage ?? "An error occurred."),
@@ -99,7 +96,7 @@ struct DessertsListView: View {
     
     private func bindErrorHandler() {
         ErrorHandler.shared.observeCurrentError()
-            .compactMap { $0 } // Filter out nil errors
+            .compactMap { $0 } // Filter out nil errors.
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { error in
                 self.currentErrorMessage = error.localizedDescription
